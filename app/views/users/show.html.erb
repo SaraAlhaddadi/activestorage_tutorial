@@ -3,6 +3,8 @@
 <%= render @user %>
 
 <div>
+
+  <%= link_to "download", rails_blob_path(@user.profile_photo, disposition: "attachment") %>
   <%= link_to "Edit this user", edit_user_path(@user) %> |
   <%= link_to "Back to users", users_path %>
 
