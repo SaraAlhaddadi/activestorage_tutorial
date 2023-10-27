@@ -16,7 +16,8 @@
 
   <p>
     <strong>Profile photo:</strong>
-    <%= link_to user.profile_photo.filename, user.profile_photo if user.profile_photo.attached? %>
+    <%= image_tag(user.profile_photo, width: 300)  if user.profile_photo.attached? %>
+    <!-- <%= link_to user.profile_photo.filename, user.profile_photo if user.profile_photo.attached? %> -->
   </p>
 
 </div>
