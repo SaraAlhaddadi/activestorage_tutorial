@@ -15,14 +15,14 @@ worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-port ENV.fetch("PORT") { 3000 }
+# port ENV.fetch("PORT") { 3000 }
 
 # Specifies the `environment` that Puma will run in.
 #
-environment ENV.fetch("RAILS_ENV") { "development" }
+# environment ENV.fetch("RAILS_ENV") { "development" }
 
 # Specifies the `pidfile` that Puma will use.
-pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
+# pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked web server processes. If using threads and workers together
@@ -40,4 +40,28 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 # preload_app!
 
 # Allow puma to be restarted by `bin/rails restart` command.
+
+nakayoshi_fork
+wait_for_less_busy_worker
+fork_worker
+
+rails_env = ENV.fetch('RAILS_ENV', 'development')
+rails_port = ENV.fetch('PORT', 3002)
+environment rails_env
+pidfile ENV.fetch('PIDFILE', 'tmp/pids/server.pid')
+
+if rails_env == 'development'
+  ssl_bind(
+    '127.0.0.1',
+    rails_port,
+    key: ENV.fetch('SSL_KEY_FILE', 'localbe.jisr.dev+3-key.pem'),
+    cert: ENV.fetch('SSL_CERT_FILE', 'localbe.jisr.dev+3.pem'),
+    verify_mode: 'none'
+  )
+else
+  port rails_port
+end
+
 plugin :tmp_restart
+
+preload_app!
