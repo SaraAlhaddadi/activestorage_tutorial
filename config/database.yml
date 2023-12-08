@@ -22,9 +22,26 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *default
-  database: activestorage_tutorial_development
+  primary:
+    <<: *default
+    database: activestorage_tutorial_development
+  # primary_replica:
+  #   <<: *default
+  #   database: activestorage_tutorial_development_replica
+  #   replica: true
+  primary_replica:
+    <<: *default
+    database: activestorage_tutorial_development_replica
+    replica: true
 
+  animals:
+    <<: *default
+    database: my_animals_database
+    migrations_paths: db/animals_migrate
+  animals_replica:
+    <<: *default
+    database: my_animals_database
+    replica: true
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
